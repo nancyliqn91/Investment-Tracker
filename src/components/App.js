@@ -1,13 +1,16 @@
 import React from 'react';
 import './../App.css';
-import Stocks from './Stocks';
+import Stocks from './StockControl';
+import Header from './Header';
+import ToggleTheme from './ToggleTheme';
 
 function App() {
   return (
     <React.Fragment>
+      < Header/>
       < Stocks />
-      <ToggleTheme />
-      
+      <ToggleTheme />   
+
     </React.Fragment>
   );
 }

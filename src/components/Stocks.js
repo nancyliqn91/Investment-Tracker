@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
-import stocksReducer from './../reducers/stocks-reducer';
-import { getStocksFailure, getStocksSuccess } from './../actions/index';
+import stocksReducer from '../reducers/stocks-reducer';
+import { getStocksFailure, getStocksSuccess } from '../actions/index';
 
 const initialState = {
   isLoaded: false,
