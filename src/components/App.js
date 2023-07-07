@@ -6,6 +6,8 @@ function App() {
   return (
     <React.Fragment>
       < Stocks />
+      <ToggleTheme />
+      
     </React.Fragment>
   );
 }

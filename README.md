@@ -34,6 +34,7 @@
 #### Friday, 07/07
 * 9:30: research api docs 
 * 10:30: familiar with stocks acronym
+* 12:00 familiar with api call in React
 
 ## 🌷 Known Bugs
 
