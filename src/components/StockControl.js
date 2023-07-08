@@ -1,56 +1,80 @@
 import React from 'react';
-import NewTickerForm from './NewTicketForm';
+import NewTickerForm from './NewTickerForm';
 import TickerList from './TickerList';
 import TickerDetail from './TickerDetail';
 import EditTickerForm from './EditTickerForm';
+import { connect } from 'react-redux';
+import PropTypes from "prop-types";
+import * as a from './../actions';
+import { formatDistanceToNow } from 'date-fns';
+
 import Stocks from './Stocks';
 
 class StockControl extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      formVisibleOnPage:false,
-      mainTickerList: [], 
+    this.state = { 
       selectedTicker: null,
       editing: false
     };
   }
 
+  componentDidMount() {
+    this.waitTimeUpdateTimer = setInterval(() =>
+      this.updateTicketElapsedWaitTime(),
+    1000
+    );
+  }
+
+  componentWillUnmount(){
+    console.log("component unmounted!");
+    clearInterval(this.waitTimeUpdateTimer);
+  }
+
+  updateTickerElapsedWaitTime = () => {
+    console.log("tickr");
+    const { dispatch } = this.props;
+    Object.values(this.props.mainTickerList).forEach(ticker => {
+        const newFormattedWaitTime = formatDistanceToNow(ticker.timeOpen, {
+          addSuffix: true
+        });
+      const action = a.updateTime(ticker.id, newFormattedWaitTime);
+      dispatch(action);
+    });
+  }
+
   handleClick = () => {
     if (this.state.selectedTicker != null) {
       this.setState({
-        formVisibleOnPage: false,
         selectedTicker: null,
         editing: false
       });
     } else {
-      this.setState(prevState => ({
-        formVisibleOnPage: !prevState.formVisibleOnPage,
-      }));
+      const { dispatch } = this.props;
+      const action = a.toggleForm();
+      dispatch(action);
     }
   }
 
   handleAddingNewTickerToList = (newTicker) => {
-    const newMainTickerList = this.state.mainCoffeeList
-    .concat(newTicker);
-    this.setState({mainTickerList: newMainTickerList,
-                  formVisibleOnPage: false });
+    const { dispatch } = this.props;
+    const action = a.addTicker(newTicker);
+    dispatch(action);
+    const action2 = a.toggleForm();
+    dispatch(action2);
   }
 
   handleChangingSelectedTicker = (id) => {
-    const selectedTicker = this.state.mainTickerList
-    .filter(ticker => ticker.id === id)[0];
+    const selectedTicker = this.props.mainTickerList[id];
     this.setState({selectedTicker: selectedTicker});
   }
 
   handleDeletingTicker = (id) => {
-    const newMainTickerList = this.state.mainTickerList
-    .filter(ticker => ticker.id !== id);
-    this.setState({
-      mainTickerList: newMainCoffeeList,
-      selectedTicker: null
-    });
+    const { dispatch } = this.props;
+    const action = a.deleteTicker(id);
+    dispatch(action);
+    this.setState({selectedTicker: null});
   }
 
   handleEditClick = () => {
@@ -58,27 +82,26 @@ class StockControl extends React.Component {
   }
 
   handleEditingTickerInList = (tickerToEdit) => {
-    const editedMainTickerList = this.state.mainTickerList
-      .filter(ticker => ticker.id !== this.state.selectedTicker.id)
-      .concat(tickerToEdit);
+    const { dispatch } = this.props;
+    const action = a.addTicket(tickerToEdit);
+    dispatch(action);
     this.setState({
-        mainTickerList: editedMainTickerList,
-        editing: false,
-        selectedTicker: null
-      });
+      editing: false,
+      selectedTicker: null
+    });
   }
 
-  handleBuyClick = () => {
-    const selectedTicker = this.state.selectedTicker;
+  // handleBuyClick = () => {
+  //   const selectedTicker = this.state.selectedTicker;
 
-    if (selectedCoffee.quantity > 0) {
-    this.setState({
-      mainTickerList: this.state.mainTickerList
-      .filter(ticker => ticker.id !== selectedTicker.id)
-      .concat({...selectedTicker, quantity: selectedTicker.quantity - 1}), 
-      selectedTicker: null })
-    }
-  }
+  //   if (selectedTicker.quantity > 0) {
+  //   this.setState({
+  //     mainTickerList: this.state.mainTickerList
+  //     .filter(ticker => ticker.id !== selectedTicker.id)
+  //     .concat({...selectedTicker, quantity: selectedTicker.quantity - 1}), 
+  //     selectedTicker: null })
+  //   }
+  // }
 
     render(){
     let currentlyVisibleState = null;
@@ -92,8 +115,9 @@ class StockControl extends React.Component {
     } 
     else if (this.state.selectedTicker != null) {
       currentlyVisibleState = <TickerDetail ticker = {this.state.selectedTicker} 
-      onClickingDelete = {this.handleDeletingTicker} onClickingEdit = {this.handleEditClick}  onClickingBuy={this.handleBuyClick} />
+      onClickingDelete = {this.handleDeletingTicker} onClickingEdit = {this.handleEditClick}/>
 
+      {/* onClickingBuy={this.handleBuyClick}  */}
       buttonText = "Return to Ticker List";
     } 
     else if (this.state.formVisibleOnPage) {
@@ -116,5 +140,19 @@ class StockControl extends React.Component {
   }
 
 }
+
+StockControl.propTypes = {
+  mainTickerList: PropTypes.object,
+  formVisibleOnPage: PropTypes.bool
+};
+
+const mapStateToProps = state => {
+  return {
+    mainTickerList: state.mainTickerList,
+    formVisibleOnPage: state.formVisibleOnPage
+  }
+}
+
+StockControl = connect(mapStateToProps)(StockControl);
 
 export default StockControl;

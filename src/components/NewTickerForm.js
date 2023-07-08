@@ -1,40 +1,39 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { v4 } from 'uuid';
+import PropTypes from "prop-types"; 
+import ReusableForm from "./ReusableForm";
+import { formatDistanceToNow } from 'date-fns';
 
-function TickerForm(props) {
+function NewTickerForm(props){
+
+  function handleNewTickerFormSubmission(event) {
+    event.preventDefault();
+    props.onNewTickerCreation({
+      name: event.target.name.value, 
+      multiplier: parseInt(event.target.multiplier.value), 
+      timespan: parseInt(event.target.timespan.value), 
+      from: event.target.from.value, 
+      to: event.target.to.value, 
+
+      id: v4(),
+      timeOpen: new Date(),
+      formattedWaitTime: formatDistanceToNow(new Date(), {
+        addSuffix: true
+      })
+    });
+  }
+
   return (
     <React.Fragment>
-      <form onSubmit={props.formSubmissionHandler}>
-        <input
-          type='text'
-          name='name'
-          placeholder='Ticker - "AAPL"' />
-        <input
-          type='text'
-          name='multiplier'
-          placeholder='multiplier -"5"' />
-        <input
-          type='text'
-          name='timespan'
-          placeholder='timespan - "minute"' />
-        <input
-          type='text'
-          name='from'
-          placeholder='from - "2023-01-09"' />
-        <input
-          type='text'
-          name='to'
-          placeholder='to - "2023-07-09"' />
-
-        <button type='submit'>{props.buttonText}</button>
-      </form>
+      <ReusableForm 
+        formSubmissionHandler={handleNewTickerFormSubmission}
+        buttonText="Add Ticker" />
     </React.Fragment>
   );
 }
 
-ReusableForm.propTypes = {
-  formSubmissionHandler: PropTypes.func,
-  buttonText: PropTypes.string
+NewTickerForm.propTypes = {
+  onNewTicketCreation: PropTypes.func
 };
 
-export default TickerForm;
+export default NewTickerForm;
