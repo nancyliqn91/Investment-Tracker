@@ -7,9 +7,9 @@ function TickerList(props){
   return (
     <React.Fragment>
       <hr/>
-      {Object.values(props.tickerList).map((ticker) => {
+      {props.tickerList.map((ticker) => {
         return <Ticker
-          whenTickerClicked = { props.onTicketSelection }
+          whenTickerClicked = { props.onTickerSelection }
 
           name={ticker.name}
           multiplier={ticker.multiplier}
@@ -26,7 +26,7 @@ function TickerList(props){
 }
 
 TickerList.propTypes = {
-  tickerList: PropTypes.object,
+  tickerList: PropTypes.array,
   onTickerSelection: PropTypes.func
 };
 
