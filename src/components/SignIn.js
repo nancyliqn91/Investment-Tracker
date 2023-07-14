@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { auth } from "./../firebase.js";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+
 function SignIn(){  
   const [signUpSuccess, setSignUpSuccess] = useState(null);
   const [signInSuccess, setSignInSuccess] = useState(null);
@@ -44,20 +47,7 @@ function SignIn(){
 
   return (
     <React.Fragment>
-      <h1>Sign up</h1>
-      {signUpSuccess}
-      <form onSubmit={doSignUp}>
-        <input
-          type='text'
-          name='email'
-          placeholder='email' />
-        <input
-          type='password'
-          name='password'
-          placeholder='Password' />
-        <button type='submit'>Sign up</button>
-      </form>
-
+      
       <h1>Sign In</h1>
       <form onSubmit={doSignIn}>
       {signInSuccess}
@@ -71,6 +61,23 @@ function SignIn(){
           placeholder='Password' />
         <button type='submit'>Sign in</button>
       </form>
+
+      <Card>
+      <h1>New to Investment Tracker?</h1>
+      {signUpSuccess}
+      <form onSubmit={doSignUp}>
+        <input
+          type='text'
+          name='email'
+          placeholder='email' />
+        <input
+          type='password'
+          name='password'
+          placeholder='Password' />
+        <button type='submit'>Sign up</button>
+      </form>
+      </Card>
+
       <h1>Sign Out</h1>
       {signOutSuccess}
       <br />
