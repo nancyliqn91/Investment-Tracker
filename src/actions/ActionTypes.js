@@ -1,4 +1,7 @@
 export const GET_STOCKS_FAILURE='GET_STOCKS_FAILURE';
 export const GET_STOCKS_SUCCESS='GET_STOCKS_SUCCESS';
-export const TOGGLE_FORM = 'TOGGLE_FORM';
-export const UPDATE_TIME = 'UPDATE_TIME';
+
+// export const ADD_TICKER = 'ADD_TICKER';
+// export const DELETE_TICKER = 'DELETE_TICKER';
+// export const TOGGLE_FORM = 'TOGGLE_FORM';
+// export const UPDATE_TIME = 'UPDATE_TIME';
