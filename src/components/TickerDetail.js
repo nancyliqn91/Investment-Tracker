@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 function TickerDetail(props){
-  const { ticker, onClickingDelete, onClickingEdit } = props; 
+  const { ticker, onClickingDelete, onClickingEdit, onClickingAPI } = props; 
 
   return (
     <React.Fragment>
@@ -15,6 +15,9 @@ function TickerDetail(props){
 
       <button onClick={onClickingEdit}>Update Ticker</button>
       <button onClick={()=> onClickingDelete(ticker.id)}>Delete Ticker</button>
+
+      <button onClick={()=> onClickingAPI(ticker.id)}>Ticker Information</button>
+
       <hr/>
     </React.Fragment>
   );
@@ -23,7 +26,8 @@ function TickerDetail(props){
 TickerDetail.propTypes = {
   ticker: PropTypes.object,
   onClickingDelete: PropTypes.func,
-  onClickingEdit: PropTypes.func 
+  onClickingEdit: PropTypes.func,
+  onClickingAPI: PropTypes.func
 };
 
 export default TickerDetail;
