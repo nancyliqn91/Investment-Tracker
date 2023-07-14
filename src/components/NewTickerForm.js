@@ -1,8 +1,7 @@
 import React from "react";
-import { v4 } from 'uuid';
+import { serverTimestamp } from "firebase/firestore";
 import PropTypes from "prop-types"; 
 import ReusableForm from "./ReusableForm";
-import { formatDistanceToNow } from 'date-fns';
 
 function NewTickerForm(props){
 
@@ -15,11 +14,7 @@ function NewTickerForm(props){
       from: event.target.from.value, 
       to: event.target.to.value, 
 
-      id: v4(),
-      timeOpen: new Date(),
-      formattedWaitTime: formatDistanceToNow(new Date(), {
-        addSuffix: true
-      })
+      timeOpen: serverTimestamp()
     });
   }
 
@@ -33,7 +28,7 @@ function NewTickerForm(props){
 }
 
 NewTickerForm.propTypes = {
-  onNewTicketCreation: PropTypes.func
+  onNewTickerCreation: PropTypes.func
 };
 
 export default NewTickerForm;

@@ -16,7 +16,6 @@ function Ticker(props){
 
 Ticker.propTypes = {
   name: PropTypes.string,
-
   id: PropTypes.string,
   whenTickerClicked: PropTypes.func,
   formattedWaitTime: PropTypes.string
