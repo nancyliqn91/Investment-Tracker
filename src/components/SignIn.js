@@ -70,10 +70,10 @@ function SignIn(){
 
     <Card style={{ width: '30rem' }}> 
     <h2>New to Investment Tracker?</h2>   
-      <Card.Link href="#">Create an account</Card.Link>
+      <Card.Link href="/sign-up">Create an account</Card.Link>
     </Card> 
 
-      <Card>
+      {/* <Card>
       <h1>Sign Up</h1>
       {signUpSuccess}
       <form onSubmit={doSignUp}>
@@ -92,7 +92,7 @@ function SignIn(){
       <h1>Sign Out</h1>
       {signOutSuccess}
       <br />
-      <button onClick={doSignOut}>Sign out</button>
+      <button onClick={doSignOut}>Sign out</button> */}
     
     </React.Fragment>
   );
