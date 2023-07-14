@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } f
 
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import Form from 'react-bootstrap/Form';
 
 function SignIn(){  
   const [signUpSuccess, setSignUpSuccess] = useState(null);
@@ -47,10 +48,12 @@ function SignIn(){
 
   return (
     <React.Fragment>
-      
-      <h1>Sign In</h1>
-      <form onSubmit={doSignIn}>
-      {signInSuccess}
+
+    <Card style={{ width: '30rem' }}> 
+    <h2>Sign in to Investment Tracker</h2>
+    <h3>{signInSuccess}</h3>
+      <Card.Body>
+      <form onSubmit={doSignIn}>     
         <input
           type='text'
           name='signinEmail'
@@ -59,11 +62,19 @@ function SignIn(){
           type='password'
           name='signinPassword'
           placeholder='Password' />
-        <button type='submit'>Sign in</button>
+        {/* <button type='submit' variant="success">Sign in</button> */}
+        <Button type='submit' variant="success">Sign in</Button>
       </form>
+      </Card.Body>
+    </Card> 
+
+    <Card style={{ width: '30rem' }}> 
+    <h2>New to Investment Tracker?</h2>   
+      <Card.Link href="#">Create an account</Card.Link>
+    </Card> 
 
       <Card>
-      <h1>New to Investment Tracker?</h1>
+      <h1>Sign Up</h1>
       {signUpSuccess}
       <form onSubmit={doSignUp}>
         <input
@@ -82,6 +93,7 @@ function SignIn(){
       {signOutSuccess}
       <br />
       <button onClick={doSignOut}>Sign out</button>
+    
     </React.Fragment>
   );
 }
