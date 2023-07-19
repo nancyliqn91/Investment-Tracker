@@ -9,6 +9,7 @@ What tools, frameworks, libraries, APIs, modules and/or other resources will you
 Minimum featrues: 
 - Call stock api 
 - Authentification
+- Host with Firebase 
 
 Tools:
 - React
