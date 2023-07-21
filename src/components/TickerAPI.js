@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-import faker from 'faker';
+import { Chart as ChartJS, Title, Tooltip, Legend, LinearScale, CategoryScale, BarController, BarElement, TimeScale} from 'chart.js';
+import 'chartjs-adapter-date-fns'; 
+import { Bar} from 'react-chartjs-2';
+import { format } from 'date-fns';
 
 const apiKey = process.env.REACT_APP_API_KEY;
 const baseURL = "https://api.polygon.io/v2/aggs/ticker";
+ChartJS.register(LinearScale, CategoryScale, BarController, BarElement, TimeScale);
 
 const TickerAPI = (props) => {
   const [data, setData] = useState(null);
@@ -43,30 +37,77 @@ const TickerAPI = (props) => {
   }, [props]);
 
   useEffect(() => {
+    let currentChartInstance = null;
     if (chartInstance) {
-      chartInstance.destroy();
+      currentChartInstance = chartInstance;
     }
+    return () => {
+      if (currentChartInstance) {
+        currentChartInstance.destroy();
+      }
+    };
   }, [chartInstance]);
 
   const generateChartData = (data) => {
     return {
-      labels: data.map((stock) => new Date(stock.t).toLocaleDateString()),
+      labels: data.map((stock) => format(new Date(stock.t), 'MM/dd/yyyy')),
       datasets: [
         {
           label: 'Closing Price',
           data: data.map((stock) => stock.c),
           borderColor: 'rgba(75, 192, 192, 1)',
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderWidth: 1,
         },
-        // Add more datasets for other properties if needed
+        {
+          label: 'Volume Weighted Average Price',
+          data: data.map((stock) => stock.vw),
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1,
+        },
+        
       ],
     };
+  };
+
+  const barChartOptions = {
+    scales: {
+      x: {
+        type: 'time',
+        time: {
+          unit: 'day',
+          tooltipFormat: 'll', 
+          // Format for tooltip (e.g., "Sep 1, 2023")
+        },
+        title: {
+          display: true,
+          text: 'Date',
+        },
+      },
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Price',
+        },
+      },
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: 'Ticker Aggregates (Bars)',
+      },
+      legend: {
+        display: true,
+        position: 'top',
+      },
+    },
   };
 
   if (error) {
     return <p>{error}</p>;
   }
-
   if (!data) {
     return null; 
     // Render loading state or return a placeholder
@@ -76,20 +117,16 @@ const TickerAPI = (props) => {
     <React.Fragment>
       <h1>Ticker Aggregates (Bars): {props.name} </h1>
       <ul>
-        <li>Explanation: Ticker is the exchange symbol that this item is traded under.</li>
-        <li>Get aggregate bars for a stock over a given date range in custom time sizes.</li>
+        <li>Ticker is the exchange symbol that this item is traded under.</li>
+        <li>Ticker aggregate bars  are for a stock over a given date range in custom time sizes.</li>
       </ul>
 
       <ul>
         {data.map((stock, index) => (
           <li key={index}>
-            <p>close price: {stock.c}</p>
-            <p>highest price: {stock.h}</p>
-            <p>lowest price: {stock.l}</p>
-            <p>number of transactions: {stock.n}</p>
-            <p>open price: {stock.o}</p>
-            <p>trading volume : {stock.v}</p>
-            <p>volume weighted average price: {stock.vw}</p>           
+            <p> start time of the aggregate : {format(new Date(stock.t), 'MM/dd/yyyy')}</p>  
+            <p>close price: {stock.c} | highest price: {stock.h} | lowest price: {stock.l} | open price: {stock.o} | volume weighted average price: {stock.vw}</p>
+            <p>number of transactions: {stock.n} | trading volume : {stock.v}</p>   
           </li>
         ))}
       </ul>
