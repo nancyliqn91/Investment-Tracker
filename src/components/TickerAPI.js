@@ -49,29 +49,41 @@ const TickerAPI = (props) => {
   }, [chartInstance]);
 
   const generateChartData = (data) => {
+     // Sort the data by date in ascending order
+    data.sort((a, b) => new Date(a.t) - new Date(b.t));
+
     return {
       labels: data.map((stock) => format(new Date(stock.t), 'MM/dd/yyyy')),
       datasets: [
         {
           label: 'Closing Price',
-          data: data.map((stock) => stock.c),
+          data: data.map((stock) => ({ x: new Date(stock.t), y: stock.c })),
           borderColor: 'rgba(75, 192, 192, 1)',
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderWidth: 1,
         },
         {
           label: 'Volume Weighted Average Price',
-          data: data.map((stock) => stock.vw),
+          data: data.map((stock) => ({ x: new Date(stock.t), y: stock.vw })),
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255, 99, 132, 1)',
           borderWidth: 1,
-        },
-        
+        },       
       ],
     };
   };
 
   const barChartOptions = {
+    plugins: {
+      title: {
+        display: true,
+        text: 'Ticker Aggregates (Bars)',
+      },
+      legend: {
+        display: true,
+        position: 'top',
+      },
+    },
     scales: {
       x: {
         type: 'time',
@@ -91,16 +103,6 @@ const TickerAPI = (props) => {
           display: true,
           text: 'Price',
         },
-      },
-    },
-    plugins: {
-      title: {
-        display: true,
-        text: 'Ticker Aggregates (Bars)',
-      },
-      legend: {
-        display: true,
-        position: 'top',
       },
     },
   };
