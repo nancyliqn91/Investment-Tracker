@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 
 const apiKey = process.env.REACT_APP_API_KEY;
 const baseURL = "https://api.polygon.io/v2/aggs/ticker";
+
 ChartJS.register(LinearScale, CategoryScale, BarController, BarElement, TimeScale);
 
 const TickerAPI = (props) => {
@@ -47,6 +48,20 @@ const TickerAPI = (props) => {
       }
     };
   }, [chartInstance]);
+
+  const BarChart = () => {
+
+
+
+    
+    return (
+      <div>
+        <Bar
+          height = {400}
+        />
+      </div>
+    )
+  }
 
   const generateChartData = (data) => {
      // Sort the data by date in ascending order
