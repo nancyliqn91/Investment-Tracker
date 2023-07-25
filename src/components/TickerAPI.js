@@ -1,159 +1,64 @@
 import React, { useEffect, useState } from "react";
-import { Chart as ChartJS, Title, Tooltip, Legend, LinearScale, CategoryScale, BarController, BarElement, TimeScale} from 'chart.js';
-import 'chartjs-adapter-date-fns'; 
+import { Chart as ChartJS, BarElement} from 'chart.js';
 import { Bar} from 'react-chartjs-2';
-import { format } from 'date-fns';
-
-const apiKey = process.env.REACT_APP_API_KEY;
-const baseURL = "https://api.polygon.io/v2/aggs/ticker";
 
 ChartJS.register(LinearScale, CategoryScale, BarController, BarElement, TimeScale);
 
-const TickerAPI = (props) => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [chartData, setChartData] = useState(null);
-  const [chartInstance, setChartInstance] = useState(null);
+const BarChart =() => {
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const url = `${baseURL}/${props.name}/range/${props.multiplier}/${props.timespan}/${props.from}/${props.to}?adjusted=true&sort=asc&limit=20&apiKey=${apiKey}`;
-
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error("Request failed with status code " + response.status);
-        }
-
-        const responseData = await response.json();
-        setData(responseData.results);
-        setChartData(generateChartData(responseData.results));
-      } catch (error) {
-        console.error(error);
-        setError("Error generating ticker");
-      }
-    };
-
-    fetchData();
-  }, [props]);
-
-  useEffect(() => {
-    let currentChartInstance = null;
-    if (chartInstance) {
-      currentChartInstance = chartInstance;
-    }
-    return () => {
-      if (currentChartInstance) {
-        currentChartInstance.destroy();
-      }
-    };
-  }, [chartInstance]);
-
-  const BarChart = () => {
-
-
-
-    
-    return (
-      <div>
-        <Bar
-          height = {400}
-        />
-      </div>
-    )
-  }
-
-  const generateChartData = (data) => {
-     // Sort the data by date in ascending order
-    data.sort((a, b) => new Date(a.t) - new Date(b.t));
-
-    return {
-      labels: data.map((stock) => format(new Date(stock.t), 'MM/dd/yyyy')),
-      datasets: [
-        {
-          label: 'Closing Price',
-          data: data.map((stock) => ({ x: new Date(stock.t), y: stock.c })),
-          borderColor: 'rgba(75, 192, 192, 1)',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderWidth: 1,
-        },
-        {
-          label: 'Volume Weighted Average Price',
-          data: data.map((stock) => ({ x: new Date(stock.t), y: stock.vw })),
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          borderColor: 'rgba(255, 99, 132, 1)',
-          borderWidth: 1,
-        },       
+  const data = {
+    labels: ["red","blue","green","yellow","purple", "orange"],
+    datasets: [{
+      label: '# of votes',
+      data: [65, 59, 80, 81, 56, 55, 40],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(255, 205, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(201, 203, 207, 0.2)'
       ],
-    };
+      borderColor: [
+        'rgb(255, 99, 132)',
+        'rgb(255, 159, 64)',
+        'rgb(255, 205, 86)',
+        'rgb(75, 192, 192)',
+        'rgb(54, 162, 235)',
+        'rgb(153, 102, 255)',
+        'rgb(201, 203, 207)'
+      ],
+      borderWidth: 1
+    }]
+
   };
 
-  const barChartOptions = {
-    plugins: {
-      title: {
-        display: true,
-        text: 'Ticker Aggregates (Bars)',
-      },
-      legend: {
-        display: true,
-        position: 'top',
-      },
-    },
+  const options = {
+    maintainAspectRatio: false,
     scales: {
-      x: {
-        type: 'time',
-        time: {
-          unit: 'day',
-          tooltipFormat: 'll', 
-          // Format for tooltip (e.g., "Sep 1, 2023")
-        },
-        title: {
-          display: true,
-          text: 'Date',
-        },
-      },
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: 'Price',
-        },
-      },
+        x: {
+            grid: {
+              offset: true
+            }
+        }
     },
+    legend: {
+      labels:{
+        fontSize: 26
+      }
+    }    
   };
-
-  if (error) {
-    return <p>{error}</p>;
-  }
-  if (!data) {
-    return null; 
-    // Render loading state or return a placeholder
-  }
 
   return (
-    <React.Fragment>
-      <h1>Ticker Aggregates (Bars): {props.name} </h1>
-      <ul>
-        <li>Ticker is the exchange symbol that this item is traded under.</li>
-        <li>Ticker aggregate bars  are for a stock over a given date range in custom time sizes.</li>
-      </ul>
-
-      <ul>
-        {data.map((stock, index) => (
-          <li key={index}>
-            <p> start time of the aggregate : {format(new Date(stock.t), 'MM/dd/yyyy')}</p>  
-            <p>close price: {stock.c} | highest price: {stock.h} | lowest price: {stock.l} | open price: {stock.o} | volume weighted average price: {stock.vw}</p>
-            <p>number of transactions: {stock.n} | trading volume : {stock.v}</p>   
-          </li>
-        ))}
-      </ul>
-
-      <h2>Bar Chart</h2>
-      {chartData && <Bar data={chartData} options={barChartOptions} ref={(ref) => setChartInstance(ref)} />}
-    </React.Fragment>
+    <div>
+      <Bar
+        height ={400}
+        data={data}
+        options={options}    
+      />
+    </div>
   );
-};
+}
 
-export default TickerAPI;
-
-
+export default BarChart;
