@@ -4,18 +4,17 @@ import { Bar} from 'react-chartjs-2';
 import { format } from 'date-fns';
 
 ChartJS.register(LinearScale, CategoryScale, BarElement);
+const apiKey = process.env.REACT_APP_API_KEY;
+const baseURL = "https://api.polygon.io/v2/aggs/ticker";
 
 const TickerAPI =(props) => {
-  const apiKey = process.env.REACT_APP_API_KEY;
-  const baseURL = "https://api.polygon.io/v2/aggs/ticker";
-  // const [chartData, setChartData] = useState(null);
   const [error, setError] = useState(null);
   const [chart, setChart] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = `${baseURL}/${props.name}/range/${props.multiplier}/${props.timespan}/${props.from}/${props.to}?adjusted=true&sort=asc&limit=20&apiKey=${apiKey}`;
+        const url = `${baseURL}/${props.name}/range/${props.multiplier}/${props.timespan}/${props.from}/${props.to}?adjusted=true&sort=asc&apiKey=${apiKey}`;
 
         const response = await fetch(url);
         if (!response.ok) {
@@ -24,7 +23,6 @@ const TickerAPI =(props) => {
 
         const responseData = await response.json();
         setChart(responseData);
-        // setChartData(generateChartData(responseData.results));
       } catch (error) {
         console.error(error);
         setError("Error generating ticker");
@@ -33,11 +31,15 @@ const TickerAPI =(props) => {
     fetchData();
   }, [props]);
 
+  if (chart === null) {
+    // Render a loading state or return null while the data is being fetched
+    return <div>Loading...</div>;
+  }
 
   const data = {
     labels: chart.results.map((stock) => format(new Date(stock.t), 'MM/dd/yyyy')),
     datasets: [{
-      label: '{chart.results.count} Aggregates Available',
+      label: 'Closing Price',
       data: chart.results.map((stock) => (stock.c)),
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
@@ -58,8 +60,16 @@ const TickerAPI =(props) => {
         'rgb(201, 203, 207)'
       ],
       borderWidth: 1
-    }]
-
+    },
+    {
+      label: 'Volume Weighted Average Price',
+      data: chart.results.map((stock) => (stock.vw)),
+      // type: 'line', // Use 'line' for line dataset
+      // fill: false, // Optional: Set to true for a filled area between the line and x-axis
+      // borderColor: 'rgba(75, 192, 192, 1)',
+      // tension: 0.1 // Adjust the line curve. Set to 0 for straight lines.
+    }
+    ]
   };
 
   const options = {
@@ -79,6 +89,23 @@ const TickerAPI =(props) => {
   };
 
   return (
+    <React.Fragment>
+      <h1>Ticker Aggregates (Bars): {props.name} </h1>
+      <ul>
+        <li>Ticker is the exchange symbol that this item is traded under.</li>
+        <li>Ticker aggregate bars  are for a stock over a given date range in custom time sizes.</li>
+      </ul>
+
+      <ul>
+        {chart.results.map((stock, index) => (
+          <li key={index}>
+            <p> start time of the aggregate : {format(new Date(stock.t), 'MM/dd/yyyy')}</p>  
+            <p>close price: ${stock.c} | highest price: ${stock.h} | lowest price: ${stock.l} | open price: ${stock.o} | volume weighted average price: ${stock.vw}</p>
+            <p>number of transactions: {stock.n} | trading volume : {stock.v}</p>   
+          </li>
+        ))}
+      </ul>
+
     <div>
       <Bar
         height ={400}
@@ -86,6 +113,7 @@ const TickerAPI =(props) => {
         options={options}    
       />
     </div>
+    </React.Fragment>
   );
 }
 
