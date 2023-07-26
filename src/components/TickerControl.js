@@ -4,7 +4,7 @@ import EditTickerForm from './EditTickerForm';
 import TickerDetail from './TickerDetail';
 import React, { useEffect, useState } from 'react';
 import TickerAPI from './TickerAPI';
-import CryptoAPI from './CryptoAPI';
+import LineAPI from './LineAPI';
 import Button from 'react-bootstrap/Button';
 
 import { collection, addDoc, doc, updateDoc, onSnapshot, deleteDoc, query, orderBy } from "firebase/firestore";
@@ -20,7 +20,7 @@ function TickerControl() {
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState(null);
   const [calling, setCalling] = useState(false);
-  const [crypto, setCrypto] = useState(false);
+  const [line, setLine] = useState(false);
   
   useEffect(() => {    
     const queryByTimestamp = query(
@@ -36,6 +36,7 @@ function TickerControl() {
           const jsDate = new Date(timeOpen);
           tickers.push({
             name:doc.data().name,
+            type:doc.data().type,
             multiplier:doc.data().multiplier,
             timespan:doc.data().timespan,
             from:doc.data().from,
@@ -61,7 +62,7 @@ function TickerControl() {
       setSelectedTicker(null);
       setEditing(false);
       setCalling(false);
-      setCrypto(false);
+      setLine(false);
     } else {
       setFormVisibleOnPage(!formVisibleOnPage);
     }
@@ -80,8 +81,8 @@ function TickerControl() {
     setCalling(true);
   }
 
-  const handleCryptoClick = () => {
-    setCrypto(true);
+  const handleLineClick = () => {
+    setLine(true);
   }
 
   const handleEditingTickerInList = async (tickerToEdit) => {
@@ -131,9 +132,13 @@ function TickerControl() {
       to={selectedTicker.to} />
       buttonText = "Return to Ticker List";
     }  
-    else if (crypto ) {      
-      currentlyVisibleState = <CryptoAPI 
-      name={selectedTicker.name} />
+    else if (line ) {      
+      currentlyVisibleState = <LineAPI 
+      name={selectedTicker.name} 
+      multiplier={selectedTicker.multiplier}
+      timespan={selectedTicker.timespan}
+      from={selectedTicker.from}
+      to={selectedTicker.to} />
       buttonText = "Return to Ticker List";
     } 
     else if (selectedTicker != null) {
@@ -143,7 +148,7 @@ function TickerControl() {
       onClickingEdit = {handleEditClick} 
       // make api call
       onClickingCall = {handleCallClick} 
-      onClickingCrypto = {handleCryptoClick} 
+      onClickingLine = {handleLineClick} 
       />
       buttonText = "Return to Ticket List";
     } else if (formVisibleOnPage) {
