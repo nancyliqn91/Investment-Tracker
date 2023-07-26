@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale} from 'chart.js';
 import { Bar} from 'react-chartjs-2';
 import { format } from 'date-fns';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 ChartJS.register(LinearScale, CategoryScale, BarElement);
 const apiKey = process.env.REACT_APP_API_KEY;
@@ -63,11 +66,7 @@ const TickerAPI =(props) => {
     },
     {
       label: 'Volume Weighted Average Price',
-      data: chart.results.map((stock) => (stock.vw)),
-      // type: 'line', // Use 'line' for line dataset
-      // fill: false, // Optional: Set to true for a filled area between the line and x-axis
-      // borderColor: 'rgba(75, 192, 192, 1)',
-      // tension: 0.1 // Adjust the line curve. Set to 0 for straight lines.
+      data: chart.results.map((stock) => (stock.vw))
     }
     ]
   };
@@ -89,31 +88,34 @@ const TickerAPI =(props) => {
   };
 
   return (
+    <Container>
+    <Row>
+    <Col>
     <React.Fragment>
-      <h1>Ticker Aggregates (Bars): {props.name} </h1>
-      <ul>
-        <li>Ticker is the exchange symbol that this item is traded under.</li>
-        <li>Ticker aggregate bars  are for a stock over a given date range in custom time sizes.</li>
-      </ul>
+      <div className="p-3 mb-2 bg-light bg-gradient text-dark rounded-5">
+        <h1>Ticker Aggregates (Bars): {props.name} </h1>
+        <ul>
+          {chart.results.map((stock, index) => (
+            <li key={index}>
+              <p> Start Time: {format(new Date(stock.t), 'MM/dd/yyyy')}</p>  
+              <p>Price: close: ${stock.c} | highest: ${stock.h} | lowest: ${stock.l} | open: ${stock.o} | volume weighted average: ${stock.vw}</p>
+              <p>Transactions Number: {stock.n} | Trading Volume : {stock.v}</p>   
+            </li>
+          ))}
+        </ul>
+      </div>
 
-      <ul>
-        {chart.results.map((stock, index) => (
-          <li key={index}>
-            <p> start time of the aggregate : {format(new Date(stock.t), 'MM/dd/yyyy')}</p>  
-            <p>close price: ${stock.c} | highest price: ${stock.h} | lowest price: ${stock.l} | open price: ${stock.o} | volume weighted average price: ${stock.vw}</p>
-            <p>number of transactions: {stock.n} | trading volume : {stock.v}</p>   
-          </li>
-        ))}
-      </ul>
-
-    <div>
-      <Bar
-        height ={400}
-        data={data}
-        options={options}    
-      />
-    </div>
+      <div>
+        <Bar
+          height ={400}
+          data={data}
+          options={options}    
+        />
+      </div>
     </React.Fragment>
+    </Col>
+    </Row>
+    </Container>
   );
 }
 
