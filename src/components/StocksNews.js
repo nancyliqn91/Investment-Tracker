@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import stocksReducer from '../reducers/stocks-reducer';
 import { getStocksFailure, getStocksSuccess } from '../actions/index';
+import Card from 'react-bootstrap/Card';
 
 const initialState = {
   isLoaded: false,
@@ -28,36 +29,39 @@ function StocksNews () {
         const action = getStocksFailure(error.message)
         dispatch(action);
       });
-    }, [])
+  }, [])
 
-    const { error, isLoaded, stocks } = state;
+  const { error, isLoaded, stocks } = state;
 
-    if (error) {
-      return <h1>Error: {error}</h1>;
-    } 
-    else if (!isLoaded) {
-      return <h1>...Loading...</h1>;
-    } 
-    else {
-      return (
-        <React.Fragment>
-          <h1>Stocks News</h1>
-          <h2>Here is the news for you</h2>
-          <ul>
-            {stocks.map((stock, index) =>
-              <li key={index}>
-                <p>Ticker:{stock.tickers[0]}</p>
-                <p>Title:{stock.title}</p>
-                <p>Author:{stock.author}</p>
-                <p>Published_utc_time:{stock.published_utc}</p>
-                <p>Article_url:<a href={stock.article_url} target="_blank" rel="noopener noreferrer">{stock.title}</a>
-                </p>            
-              </li>
-            )}
-          </ul>
-        </React.Fragment>
-      );
-    }
+  if (error) {
+    return <h1>Error: {error}</h1>;
+  } 
+  else if (!isLoaded) {
+    return <h1>...Loading...</h1>;
+  } 
+  else {
+    return (       
+    <Card style={{ width: '90rem' }}>
+      <Card.Body>
+        <Card.Title>Stocks News</Card.Title>
+        <ul>
+          {stocks.map((stock, index) =>
+            <li key={index}>
+              <Card.Subtitle className="mb-2 text-muted">Ticker:{stock.tickers[0]}</Card.Subtitle>
+              <Card.Link href={stock.article_url} target="_blank" rel="noopener noreferrer">{stock.title}</Card.Link>
+              <Card.Text>
+              Author:{stock.author}
+              </Card.Text>
+              <Card.Text>
+              Published_Utc_Time: {stock.published_utc}
+              </Card.Text>          
+            </li>
+          )}
+        </ul>
+      </Card.Body>
+    </Card>
+    );
+  } 
 }
 
 export default StocksNews;

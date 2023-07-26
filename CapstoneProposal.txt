@@ -14,6 +14,7 @@ Minimum featrues:
 Tools:
 - React
 - Stocks API
+- Firebase
 
 Further Exploration:
 - Call ChatGPT

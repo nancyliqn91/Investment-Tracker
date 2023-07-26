@@ -1,3 +1,12 @@
+.hint {
+  text-align: center;
+  color: chocolate;
+}
+
+.social-icon-footer {
+  color: var(--bs-green);
+}
+
 .App {
   text-align: center;
 }

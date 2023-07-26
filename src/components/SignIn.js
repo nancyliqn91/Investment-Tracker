@@ -21,6 +21,7 @@ function SignIn(){
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setSignInSuccess(`You've successfully signed in as ${userCredential.user.email}!`);
+        // navigate to ticker list page
         navigate('/');
       })
       .catch((error) => {

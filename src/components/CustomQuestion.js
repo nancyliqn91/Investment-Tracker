@@ -39,7 +39,7 @@ const CustomQuestion = ({ prompt}) => {
               <form onSubmit={handleUserInputSubmit}>
               <textarea
                 type="text"
-                placeholder="Message"
+                placeholder="Any Question?"
                 onChange={handleUserInputChange}
                 value={userInput}
                 required

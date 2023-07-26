@@ -27,6 +27,6 @@ const generateAnswer = async (prompt) => {
     console.error(error);
     throw new Error("Error generating text");
   }
-};
+}
 
-export default generateAnswer;
+export default generateAnswer

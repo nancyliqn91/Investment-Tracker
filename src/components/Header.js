@@ -11,7 +11,6 @@ import Button from 'react-bootstrap/Button';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import searchAPI from "./SearchAPI";
-import Card from 'react-bootstrap/Card';
 
 function Header(prompt){
   const [isSignedIn, setIsSignedIn] = useState(null);
@@ -50,7 +49,7 @@ function Header(prompt){
           <Nav className="me-auto">
             <Nav.Link href="/">Manage Tickers</Nav.Link>
             <Nav.Link href="/news">Stocks News</Nav.Link>
-
+            <Nav.Link href="/tickerInfo">About</Nav.Link>
             {!isSignedIn ? (
             <>
               <Nav.Link href="/sign-in">Sign In</Nav.Link>
