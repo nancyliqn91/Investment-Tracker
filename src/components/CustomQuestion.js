@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import  generateAnswer from "./ChatGPT";
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 
 const CustomQuestion = ({ prompt}) => {
   const [userInput, setUserInput] = useState("");
@@ -20,25 +22,38 @@ const CustomQuestion = ({ prompt}) => {
     setUserInput(e.target.value);
   };
 
-  return (
-    <div className="container">
-      <div className="input-container">
-        <form onSubmit={handleUserInputSubmit}>
-          <input
-            type="text"
-            placeholder="Message"
-            onChange={handleUserInputChange}
-            value={userInput}
-            required
-          />
-
-          <button onClick={handleUserInputSubmit}
-          > Submit </button>
-        </form>
-      </div>
-
-    </div>
+  return ( 
+    <>
+      {[
+        'Success'
+      ].map((variant) => (
+        <Card
+          bg={variant.toLowerCase()}
+          key={variant}
+          text={variant.toLowerCase() === 'light' ? 'dark' : 'white'}
+          style={{ width: '18rem' }}
+          className="mb-2"
+        >
+          <Card.Body>
+            <Card.Title>Type Here</Card.Title>
+              <form onSubmit={handleUserInputSubmit}>
+              <textarea
+                type="text"
+                placeholder="Message"
+                onChange={handleUserInputChange}
+                value={userInput}
+                required
+              />
+              <Button variant="primary" type="submit">Submit </Button>
+            </form>
+            <Card.Text>
+            Answer:{generatedAnswer}
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      ))}
+    </>
   );
 };
 
-export default CustomQuestion;
+export default CustomQuestion
