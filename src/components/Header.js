@@ -11,6 +11,7 @@ import Button from 'react-bootstrap/Button';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import searchAPI from "./SearchAPI";
+import Card from 'react-bootstrap/Card';
 
 function Header(prompt){
   const [isSignedIn, setIsSignedIn] = useState(null);
@@ -42,7 +43,7 @@ function Header(prompt){
 
   return (
     <React.Fragment>   
-      <Navbar bg="dark" data-bs-theme="dark" fixed="top">
+      <Navbar bg="light" data-bs-theme="light" fixed="top">
         <Container>
         <img style={{width: 50, height: 50}} src={Logo} alt="a dinasour logo"/>
           <Navbar.Brand href="/">Investment Tracker</Navbar.Brand>
