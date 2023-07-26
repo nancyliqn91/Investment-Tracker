@@ -11,14 +11,12 @@ import Button from 'react-bootstrap/Button';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import searchAPI from "./SearchAPI";
-import { useHistory } from 'react-router-dom';
 
 function Header(prompt){
   const [isSignedIn, setIsSignedIn] = useState(null);
   const [userInput, setUserInput] = useState("");
   const [generatedAnswer, setGeneratedAnswer] = useState([]);
-  const history = useHistory();
-  
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setIsSignedIn(!!user);
@@ -82,6 +80,19 @@ function Header(prompt){
         </Row>
         </Container>
       </Navbar>
+
+      <div className="container">
+        <ul>
+          {generatedAnswer && generatedAnswer.map((item, index) =>(
+            <li key={index}>
+              <p>Ticker:{item.ticker}</p>
+              <p>Name:{item.name}</p>
+              <p>Market:{item.market}</p>       
+            </li>
+          )
+          )}
+        </ul>
+    </div>
     </React.Fragment>
   );
 }
