@@ -44,7 +44,7 @@
 
 ## 🏵️ How to use this App
 
-* View this project [live](investment-tracker-208f1.web.app) here!
+* View this project [live](https://investment-tracker-208f1.web.app/) here!
 
 ## 🏵️ OR If you want to run this app locally on your machine:
 * Go to https://github.com/nancyliqn91/Stock-Tracker to clone the GitHub repository.
