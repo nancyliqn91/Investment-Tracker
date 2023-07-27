@@ -30,7 +30,6 @@ const LineAPI =(props) => {
             throw new Error("Request failed with status code " + response.status);
           }
         }
-
         const responseData = await response.json();
         // for debug
         console.log("Fetched data:", responseData);
@@ -74,8 +73,8 @@ const LineAPI =(props) => {
       borderWidth: 1
     },
     {
-      label: 'Volume Weighted Average Price',
-      data: chart.results.map((stock) => (stock.vw))
+      label: 'Highest Price',
+      data: chart.results.map((stock) => (stock.h))
     }
     ]
   };
@@ -89,11 +88,19 @@ const LineAPI =(props) => {
             }
         }
     },
-    legend: {
-      labels:{
-        fontSize: 26
+    plugins: {
+      legend: {
+        display: true,
+        labels: {
+          fontSize: 26
+        }
       }
-    }    
+    }
+    // legend: {
+    //   labels:{
+    //     fontSize: 26
+    //   }
+    // }    
   };
 
   return (
@@ -103,15 +110,19 @@ const LineAPI =(props) => {
     <React.Fragment>
       <div className="p-3 mb-2 bg-light bg-gradient text-dark rounded-5">
         <h1>Ticker Aggregates (Bars): {props.name} </h1>
-        <ul>
-          {chart.results.map((stock, index) => (
-            <li key={index}>
-              <p> Start Time: {format(new Date(stock.t), 'MM/dd/yyyy')}</p>  
-              <p>Price: close: ${stock.c} | highest: ${stock.h} | lowest: ${stock.l} | open: ${stock.o} | volume weighted average: ${stock.vw}</p>
-              <p>Transactions Number: {stock.n} | Trading Volume : {stock.v}</p>   
-            </li>
-          ))}
-        </ul>
+        {chart.results && chart.results.length > 0 ? (
+          <ul>
+            {chart.results.map((stock, index) => (
+              <li key={index}>
+                <p> Start Time: {format(new Date(stock.t), 'MM/dd/yyyy')}</p>  
+                <p>Price: close: ${stock.c} | highest: ${stock.h} | lowest: ${stock.l} | open: ${stock.o} | volume weighted average: ${stock.vw}</p>
+                <p>Transactions Number: {stock.n}| Trading Volume : {stock.v}</p>   
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No data available.</p>
+        )}
       </div>
 
       <div>
