@@ -2,7 +2,7 @@
 
 #### By Qian Li 😊
 
-#### An full CRUD application in React that tracks stocks, options, indices, forex, and crypto with bar and line chars for the aggregates.With the help of ChatGPT, you can find the tickers you're interested. Or by the search bar.
+#### An full CRUD application in React that tracks stocks, options, indices, forex, and crypto with bar and line charts for the aggregates. With the help of ChatGPT, you can find the tickers you're interested. Or by the search bar.
 
 ## 🌼 Technologies Used
 
@@ -44,10 +44,18 @@
 
 ## 🏵️ How to use this App
 
-* View this project live here!
+* View this project [live](investment-tracker-208f1.web.app) here!
 
 ## 🏵️ OR If you want to run this app locally on your machine:
 * Go to https://github.com/nancyliqn91/Stock-Tracker to clone the GitHub repository.
+* Go to [polygon.io]("https://polygon.io/docs/stocks/getting-started") and [OpenAI](https://platform.openai.com/docs/introduction) to get the `API Key`.
+* Create `.env` file in your root folder like below.
+```
+REACT_APP_API_KEY = "Your Key"
+
+REACT_APP_OPENAI_API_KEY = "Your Key"
+```
+* Go to [Adding Firebase to React](https://www.learnhowtoprogram.com/react/react-with-nosql/adding-firebase-to-react) and follow instructions to add firebase.
 * In your terminal/command line, go into the folder that was cloned and run `npm install`, this will downloading all the package dependencies.
 * Next run `npm run start` to start the server. Once the server loads, the webpage should load automatically but if not type in the localhost route that your terminal shows like `https://localhost:3000`.
 
